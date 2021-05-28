@@ -1,0 +1,73 @@
+---
+title: "How To Get SSL Certificate on AWS"
+publishedAt: "2021-03-22"
+summary: "How to get SSL certificate on aws ec2 instance for free on nginx using letsencrypt easy and fast way to get SSl certificate"
+author: "avinash sharma"
+---
+
+# how to get ssl certificate on aws for free using LetsEncryp on nginx
+
+# _Table of Contents_
+
+---
+
+- 1.[ ssh into the server](/blog/how-to-get-ssl-certificate-on-aws#ssh-into-the-server)
+- 2.[ Instal snapd](/blog/how-to-get-ssl-certificate-on-aws#install-snapd)
+- 3.[ version check](/blog/how-to-get-ssl-certificate-on-aws#ensure-that-your-version-of-snapd-is-up-to-date)
+- 4.[ Install Certbot](/blog/how-to-get-ssl-certificate-on-aws#install-certbot)
+- 5.[ Prepare the Certbot command](/blog/how-to-get-ssl-certificate-on-aws#prepare-the-certbot-command)
+- 6.[ Run Certbot](/blog/how-to-get-ssl-certificate-on-aws#either-get-and-install-your-certificates)
+
+## SSH into the server
+
+```bash
+    ssh -i "your-key.pem" ubuntu@ec2-x-y-z-w...amazonaws.com
+```
+
+### Enter into sudo mode
+
+```bash
+    sudo su -
+```
+
+by doing this you Enter in to root@ip-[ip]
+
+## Install snapd
+
+- this helps you to have a snap of your build and the projects/software that are on the server/system
+
+## Ensure that your version of snapd is up to date
+
+```bash
+    sudo snap install core; sudo snap refresh core
+```
+
+## Install Certbot
+
+```bash
+    sudo snap install --classic certbot
+```
+
+## Prepare the Certbot command
+
+```bash
+    sudo ln -s /snap/bin/certbot /usr/bin/certbot
+```
+
+## Choose how you'd like to run Certbot
+
+### Either get and install your certificates...
+
+Run this command to get a certificate and have Certbot edit your Nginx configuration automatically to serve it, turning on HTTPS access in a single step.
+
+```bash
+    sudo certbot --nginx
+```
+
+### Or, just get a certificate
+
+If you're feeling more conservative and would like to make the changes to your Nginx configuration by hand, run this command.
+
+```bash
+    sudo certbot certonly --nginx
+```
