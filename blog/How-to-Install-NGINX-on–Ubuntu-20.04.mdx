@@ -167,11 +167,17 @@ sudo chmod -R 755 /var/www/your_domain
  
 Next, create a sample index.html page using nano or your favorite editor:
 
-nano /var/www/your_domain/html/index.html
- 
+```bash
+vim /var/www/your_domain/html/index.html
+```
+
 Inside, add the following sample HTML:
 
+```bash
 /var/www/your_domain/html/index.html
+```
+
+```vim
 <html>
     <head>
         <title>Welcome to your_domain!</title>
@@ -180,17 +186,17 @@ Inside, add the following sample HTML:
         <h1>Success!  The your_domain server block is working!</h1>
     </body>
 </html>
- 
+```
 Save and close the file by typing CTRL and X then Y and ENTER when you are finished.
 
 In order for Nginx to serve this content, it’s necessary to create a server block with the correct directives. Instead of modifying the default configuration file directly, let’s make a new one at /etc/nginx/sites-available/your_domain:
-
-sudo nano /etc/nginx/sites-available/your_domain
- 
+```bash
+    sudo nano /etc/nginx/sites-available/your_domain
+```
 Paste in the following configuration block, which is similar to the default, but updated for our new directory and domain name:
 
 ```bash
-/etc/nginx/sites-available/your_domain
+    /etc/nginx/sites-available/your_domain
 ```
 
 ```vim
@@ -213,7 +219,9 @@ Notice that we’ve updated the root configuration to our new directory, and the
 
 Next, let’s enable the file by creating a link from it to the sites-enabled directory, which Nginx reads from during startup:
 
+```bash
 sudo ln -s /etc/nginx/sites-available/your_domain /etc/nginx/sites-enabled/
+ ```
  
 Two server blocks are now enabled and configured to respond to requests based on their listen and server_name directives (you can read more about how Nginx processes these directives here):
 
@@ -221,8 +229,10 @@ your_domain: Will respond to requests for your_domain and www.your_domain.
 default: Will respond to any requests on port 80 that do not match the other two blocks.
 To avoid a possible hash bucket memory problem that can arise from adding additional server names, it is necessary to adjust a single value in the /etc/nginx/nginx.conf file. Open the file:
 
-sudo nano /etc/nginx/nginx.conf
- 
+```bash
+    sudo nano /etc/nginx/nginx.conf
+```
+
 Find the server_names_hash_bucket_size directive and remove the # symbol to uncomment the line. If you are using nano, you can quickly search for words in the file by pressing CTRL and w.
 
 ```vim
@@ -247,7 +257,7 @@ Next, test to make sure that there are no syntax errors in any of your Nginx fil
 If there aren’t any problems, restart Nginx to enable your changes:
 
 ```bash
-sudo systemctl restart nginx
+    sudo systemctl restart nginx
 ```
  
 Nginx should now be serving your domain name. You can test this by navigating to http://your_domain, where you should see something like this:
