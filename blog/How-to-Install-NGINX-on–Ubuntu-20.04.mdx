@@ -9,7 +9,7 @@ author: "avinash sharma"
 
 ## What is Nginx?
 
-*NGINX* is open-source software for web serving, reverse proxying, caching, load balancing, media streaming, and more. It started out as a web server designed for maximum performance and stability. More than 75% of the website that is hosted online are hosted on Nginx and Apache Web Server.
+NGINX is open-source software for web servers, reverse proxy, caching, load balancing, media streaming, and more. It started out as a web server designed for maximum performance and stability for web hosting. More than 75% of the website that is hosted online are hosted on Nginx and Apache Web Server.
 
 # _Table of Contents_
 
@@ -38,7 +38,8 @@ Before Installing the Nginx web server we need to upgrade the operating system, 
 ## Step 3 – Adjusting the Firewall
 
 ### What is ufw?
-The Uncomplicated Firewall (ufw), is a frontend for iptables and is particularly well-suited for host-based firewalls. ufw provides a framework for managing Netfilter and a command-line interface for manipulating the firewall.
+
+The Uncomplicated Firewall (ufw), is a frontend for IPTables and is particularly well-suited for host-based firewalls for web servers. ufw provides a framework for managing Netfilter (Basically to filter out what incoming traffic is to be allowed) and a command-line (CLI) interface for manipulating the firewall.
 
 
 You should get a listing of the application profiles that have the access to the external connections:
@@ -55,13 +56,9 @@ Available applications:
 ```
 As observed by the output, there are three profiles available for Nginx config:
 
-* Nginx HTTP: This profile opens only port 80 (normal, unencrypted web traffic)
+![Screenshot 2021-05-29 at 11 53 48 PM](https://user-images.githubusercontent.com/58262578/120081056-2704e300-c0d9-11eb-9e5d-f085545bc070.png)
 
-* Nginx HTTPS: This profile opens only port 443 (TLS/SSL encrypted traffic)
-
-* Nginx Full: This profile opens both port 80 (normal, unencrypted web traffic) and port 443 (TLS/SSL encrypted traffic)
-
-It is recommended that you enable the most restrictive profile that will still allow the traffic you’ve configured. Right now, we will only need to allow traffic on port 80 its our wish that if we want to enable the http or https to your website. In the future, we can add an SSL certificate in order to get the full advantage of the HTTPS protocol Heare is the link on [how to enable the SSL certificate.](https://blog.avinash-sharma.com/blog/how-to-get-ssl-certificate-on-aws)
+It is recommended that you enable the most restrictive profile that will still allow the traffic you’ve configured (To have height secret ). Right now, we will only need to allow traffic on port 80 it's our wish that if we want to enable the HTTP or HTTPS to your website. In the future, we can add an SSL certificate in order to get the full advantage of the HTTPS protocol Heare is the link on [how to enable the SSL certificate.](https://blog.avinash-sharma.com/blog/how-to-get-ssl-certificate-on-aws)
 
 ### If not Enabled you can enable this by typing:
 
@@ -86,89 +83,85 @@ OpenSSH (v6)               ALLOW       Anywhere (v6)
 Nginx HTTP (v6)            ALLOW       Anywhere (v6)
 ```
 
-Step 3 – Checking your Web Server is runn
-
 Step 3 – Checking your Web Server is running or not:
 
 ```bash
     systemctl status nginx
 ```
 
-```Output
-● nginx.service - A high performance web server and a reverse proxy server
-   Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
-   Active: active (running) since Fri 2020-04-20 16:08:19 UTC; 3 days ago
-     Docs: man:nginx(8)
- Main PID: 2369 (nginx)
-    Tasks: 2 (limit: 1153)
-   Memory: 3.5M
-   CGroup: /system.slice/nginx.service
-           ├─2370 nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
-           └─2381 nginx: worker process
-```
+This command gives you the status of the Nginx server
 
-Step 4 – Managing the Nginx Process
-Now that you have your web server up and running, let’s review some basic management commands.
+<img width="1097" alt="Screenshot 2021-05-29 at 11 46 27 PM" src="https://user-images.githubusercontent.com/58262578/120080813-26b81800-c0d8-11eb-8df8-9fb4816c9474.png">
 
-To stop your web server, type:
+# Cheat Sheet for Nginx
+
+Now that you have your web server up and running, let’s review some basic management commands (Cheat Sheet for Nginx).
+
+## To stop your Nginx web server, type:
 
 ```bash
     sudo systemctl stop nginx
 ```
  
-To start the web server when it is stopped, type:
+## To start the Nginx web server when it is stopped, type:
 
 ```bash
-sudo systemctl start nginx
+    sudo systemctl start nginx
 ```
 
-To stop and then start the service again, type:
+## To stop and then start (restart) the service again, type:
 
 ```bash
-sudo systemctl restart nginx
+    sudo systemctl restart nginx
 ```
 
-If you are only making configuration changes, Nginx can often reload without dropping connections. To do this, type:
+## If you are only making configuration changes in The Nginx config, Nginx can often reload without dropping connections, this is a great feature. To do this, type:
 
 ```bash
-sudo systemctl reload nginx
+    sudo systemctl reload nginx
 ```
 
-By default, Nginx is configured to start automatically when the server boots. If this is not what you want, you can disable this behavior by typing:
+## By default, The Nginx server is configured to start automatically when the server boots. If that’s not what you want(to reduce the load on the server), you can disable this behavior by typing:
 
 ```bash
-sudo systemctl disable nginx
+    sudo systemctl disable nginx
 ``` 
 
-To re-enable the service to start up at boot, you can type:
+## To enable the service to start up at boot time, you can type:
 
 ```bash
-sudo systemctl enable nginx
+    sudo systemctl enable nginx
 ``` 
 
-You have now learned basic management commands and should be ready to configure the site to host more than one domain.
+You have now learned basic management commands and should be ready to configure the site to host more than one domain 🎉.
 
-Step 5 – Setting Up Server Blocks (Recommended)
+# Step 5 – Setting Up Server Blocks (Recommended)
+
 When using the Nginx web server, server blocks (similar to virtual hosts in Apache) can be used to encapsulate configuration details and host more than one domain from a single server. We will set up a domain called your_domain, but you should replace this with your own domain name. To learn more about setting up a domain name with DigitalOcean, please refer to our Introduction to DigitalOcean DNS.
 
 Nginx on Ubuntu 20.04 has one server block enabled by default that is configured to serve documents out of a directory at /var/www/html. While this works well for a single site, it can become unwieldy if you are hosting multiple sites. Instead of modifying /var/www/html, let’s create a directory structure within /var/www for our your_domain site, leaving /var/www/html in place as the default directory to be served if a client request doesn’t match any other sites.
 
 Create the directory for your_domain as follows, using the -p flag to create any necessary parent directories:
 
+```bash
 sudo mkdir -p /var/www/your_domain/html
- 
+```
+
 Next, assign ownership of the directory with the $USER environment variable:
 
+```bash
 sudo chown -R $USER:$USER /var/www/your_domain/html
- 
+```
+
 The permissions of your web roots should be correct if you haven’t modified your umask value, which sets default file permissions. To ensure that your permissions are correct and allow the owner to read, write, and execute the files while granting only read and execute permissions to groups and others, you can input the following command:
 
-sudo chmod -R 755 /var/www/your_domain
- 
+```bash 
+    sudo chmod -R 755 /var/www/your_domain
+```
 Next, create a sample index.html page using nano or your favorite editor:
 
 ```bash
-vim /var/www/your_domain/html/index.html
+    vim /var/www/your_domain/html/index.html
 ```
 
 Inside, add the following sample HTML:
